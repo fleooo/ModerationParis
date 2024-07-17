@@ -2,16 +2,26 @@
 <html>
     <head>
         <meta charset="UTF-8">
-        <title>{% block title %}Welcome!{% endblock %}</title>
+        <title>{% block title %}Welcome!{% endblock %} - Moderation Paris</title>
         <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 128 128%22><text y=%221.2em%22 font-size=%2296%22>⚫️</text><text y=%221.3em%22 x=%220.2em%22 font-size=%2276%22 fill=%22%23fff%22>sf</text></svg>">
-        {% block stylesheets %}
-        {% endblock %}
-
-        {% block javascripts %}
-            {% block importmap %}{{ importmap('app') }}{% endblock %}
-        {% endblock %}
+        <link rel="preconnect" href="https://fonts.googleapis.com">
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link href="https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&display=swap" rel="stylesheet">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        
+        <link rel="stylesheet" href="{{asset('assets/css/bootstrap.min.css')}}">
+        {% block stylesheets %}{% endblock %}
+        <link rel="stylesheet" href="{{asset('assets/css/styles.css')}}">
+       
+        <script src="{{asset('assets\js\bootstrap.bundle.js')}}"></script>
+        {% block javascripts %} {% endblock %}
+        <script src="{{asset('assets\js\scripts.js')}}"></script>
     </head>
     <body>
+        {% include "_partials/_nav.html.twig"  %}
+
         {% block body %}{% endblock %}
+
+        {% include "_partials/_footer.html.twig"  %}
     </body>
 </html>
