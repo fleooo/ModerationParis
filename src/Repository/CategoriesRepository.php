@@ -1,14 +1,12 @@
 <?php
 
+
 namespace App\Repository;
 
 use App\Entity\Categories;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
 
-/**
- * @extends ServiceEntityRepository<Categories>
- */
 class CategoriesRepository extends ServiceEntityRepository
 {
     public function __construct(ManagerRegistry $registry)
@@ -16,28 +14,23 @@ class CategoriesRepository extends ServiceEntityRepository
         parent::__construct($registry, Categories::class);
     }
 
-    //    /**
-    //     * @return Categories[] Returns an array of Categories objects
-    //     */
-    //    public function findByExampleField($value): array
-    //    {
-    //        return $this->createQueryBuilder('c')
-    //            ->andWhere('c.exampleField = :val')
-    //            ->setParameter('val', $value)
-    //            ->orderBy('c.id', 'ASC')
-    //            ->setMaxResults(10)
-    //            ->getQuery()
-    //            ->getResult()
-    //        ;
-    //    }
+    public function findParentById(int $id): ?Categories
+    {
+        return $this->find($id);
+    }
 
-    //    public function findOneBySomeField($value): ?Categories
-    //    {
-    //        return $this->createQueryBuilder('c')
-    //            ->andWhere('c.exampleField = :val')
-    //            ->setParameter('val', $value)
-    //            ->getQuery()
-    //            ->getOneOrNullResult()
-    //        ;
-    //    }
+    public function findParentByName(string $name): ?Categories
+    {
+        return $this->findOneBy(['name' => $name]);
+    }
+
+    public function findChildrenByParent(Categories $parent): array
+    {
+        return $this->createQueryBuilder('c')
+            ->where('c.parent = :parent')
+            ->setParameter('parent', $parent)
+            ->orderBy('c.categoryOrder', 'ASC')
+            ->getQuery()
+            ->getResult();
+    }
 }

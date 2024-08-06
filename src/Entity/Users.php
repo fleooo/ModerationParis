@@ -26,6 +26,8 @@ class Users implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\Column(length: 180, unique: true)]
     private ?string $email = null;
 
+    
+
     /**
      * @var list<string> The user roles
      */
@@ -53,7 +55,11 @@ class Users implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\Column(length: 150)]
     private ?string $city = null;
 
+    #[ORM\Column(type: 'boolean', nullable: true)]
+    private ?bool $is_verified = null;
 
+    #[ORM\Column(length: 180)]
+    private ?string $resetToken = null;
 
     /**
      * @var Collection<int, Orders>
@@ -202,8 +208,30 @@ class Users implements UserInterface, PasswordAuthenticatedUserInterface
         return $this;
     }
 
-    
+    public function getIsVerified(): ?bool
+    {
+        return $this->is_verified;
+    }
 
+    public function setIsVerified(bool $is_verified): static
+    {
+        $this->is_verified = $is_verified;
+
+        return $this;
+    }
+
+    public function getResetToken(): ?string
+    {
+        return $this->resetToken;
+    }
+
+    public function setResetToken(string $resetToken): static
+    {
+        $this->resetToken = $resetToken;
+
+        return $this;
+    }
+    
     /**
      * @return Collection<int, Orders>
      */

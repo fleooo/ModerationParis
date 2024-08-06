@@ -1,0 +1,93 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+    <main class="container">
+        <section class="row">
+            <div class="col-12">
+                <h1>Panier</h1>
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th>Produit</th>
+                            <th>Prix</th>
+                            <th>Quantité</th>
+                            <th>Total</th>
+                            <th>Action</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for element in data %}
+                            <tr>
+                                <td>{{ element.product.name }}</td>
+                                <td>{{ element.product.price / 100 }} €</td>
+                                <td>{{ element.quantity }}</td>
+                                <td>{{ element.quantity * element.product.price / 100 }} €</td>
+                                <td>
+                                    <!-- AJAX Add -->
+                                    <button class="btn btn-success" data-action="add" data-product-id="{{ element.product.id }}">+</button>
+                                    <!-- AJAX Remove -->
+                                    <button class="btn btn-warning" data-action="remove" data-product-id="{{ element.product.id }}">-</button>
+                                    <!-- Remove from Cart -->
+                                    <a href="{{ path('cart_delete', {id: element.product.id}) }}" class="btn btn-danger">Supprimer</a>
+                                </td>
+                            </tr>
+                        {% else %}
+                            <tr>
+                                <td colspan="5">Votre panier est vide</td>
+                            </tr>    
+                        {% endfor %}
+                    </tbody>
+                    <tfoot>
+                        <tr>
+                            <td colspan="3">Total</td>
+                            <td>{{ total / 100 }} €</td>
+                            <td>
+                                <a href="{{ path('cart_empty') }}" class="btn btn-danger">Vider</a>
+                            </td>
+                        </tr>
+                    </tfoot>
+                </table>
+                <a href="{{ path('app_orders_add') }}" class="btn btn-primary">Valider le panier</a>
+            </div>
+        </section>
+    </main>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            document.querySelectorAll('button[data-action]').forEach(button => {
+                button.addEventListener('click', function() {
+                    const action = this.getAttribute('data-action');
+                    const productId = this.getAttribute('data-product-id');
+
+                    let url;
+                    if (action === 'add') {
+                        url = '{{ path('cart_add_ajax') }}';
+                    } else if (action === 'remove') {
+                        url = '{{ path('cart_remove_ajax') }}';
+                    }
+
+                    fetch(url, {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                            'X-Requested-With': 'XMLHttpRequest',
+                        },
+                        body: JSON.stringify({ id: productId })
+                    })
+                    .then(response => response.json())
+                    .then(data => {
+                        if (data.success) {
+                            location.reload(); // Recharger la page pour mettre à jour le panier
+                        } else {
+                            alert(data.message);
+                        }
+                    })
+                    .catch(error => {
+                        console.error('Erreur:', error);
+                        alert('Erreur lors de la mise à jour du panier.');
+                    });
+                });
+            });
+        });
+    </script>
+{% endblock %}

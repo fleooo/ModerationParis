@@ -1,9 +1,55 @@
 {% extends "base.html.twig" %}
 
-{% block title %}Détails de
-    {{ product.name }}
-{% endblock %}
+{% block title %}Détails de {{ product.name }}{% endblock %}
 
 {% block body %}
-   <h1>details du produits {{ product.name }}</h1>
+<main class="container">
+    <section class="row">
+        <div class="col-6">
+            {% if product.images|length > 0 %}
+                {% set image = product.images[0] %}
+                <img src="{{ asset('asset/uploads/products/') ~ image.name }}" class="w-50" alt="{{ product.name }} " >
+            {% endif %}
+        </div>
+        <div class="col-6">
+            <p>{{ product.description }}</p>
+            <p>{{ product.categories.name }}</p>
+            <p>{{ product.price / 100 }}$</p>
+            {% if product.stock > 0 %}
+                <button id="add-to-cart" data-product-id="{{ product.id }}" class="btn btn-primary">Ajouter au panier</button>
+            {% else %}
+                <p class="text-danger">Temporairement en rupture de stock</p>
+            {% endif %}
+        </div>
+    </section>
+</main>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        document.getElementById('add-to-cart').addEventListener('click', function() {
+            var productId = this.getAttribute('data-product-id');
+
+            fetch('{{ path('cart_add_ajax') }}', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-Requested-With': 'XMLHttpRequest',
+                },
+                body: JSON.stringify({ id: productId })
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    alert(data.message);
+                } else {
+                    alert(data.message);
+                }
+            })
+            .catch(error => {
+                console.error('Erreur:', error);
+                alert('Erreur lors de l\'ajout au panier.');
+            });
+        });
+    });
+</script>
 {% endblock %}

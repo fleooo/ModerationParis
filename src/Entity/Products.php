@@ -9,6 +9,7 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Validator\Constraints as Assert;
 
 #[ORM\Entity(repositoryClass: ProductsRepository::class)]
 class Products
@@ -22,7 +23,15 @@ class Products
     private ?int $id = null;
 
     #[ORM\Column(length: 255)]
+    #[Assert\NotBlank(message:'le nom du produit ne peut pas etre vide')]
     private ?string $name = null;
+    #[Assert\Length(
+        min: 3,
+        max: 255,
+        minMessage: 'le nom du produit doit contenir au moins {{limit}} caracteres',
+        maxMessage: 'le nom du produit ne peut pas contenir plus de {{limit}} caracteres'
+        
+    )]
 
     #[ORM\Column(type: Types::TEXT)]
     private ?string $description = null;
@@ -31,7 +40,11 @@ class Products
     private ?int $price = null;
 
     #[ORM\Column]
+    #[Assert\PositiveOrZero(
+        message: 'le stock du produit ne peut pas etre null'
+    )]
     private ?int $stock = null;
+
 
     
 
@@ -42,7 +55,7 @@ class Products
     /**
      * @var Collection<int, Images>
      */
-    #[ORM\OneToMany(targetEntity: Images::class, mappedBy: 'products', orphanRemoval: true)]
+    #[ORM\OneToMany(targetEntity: Images::class, mappedBy: 'products', orphanRemoval: true, cascade:['persist'])]
     private Collection $images;
 
     /**

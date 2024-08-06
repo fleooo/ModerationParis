@@ -35,7 +35,7 @@ class RegistrationFormType extends AbstractType
         ->add('address', TextType::class, [
             'label' => 'Adresse :',
             'attr' => ['class' => 'form-control',
-                'placeholder' => 'Votre adresse'
+                
             ]
         ])
         ->add('zipcode', TextType::class, [

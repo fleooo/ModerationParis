@@ -1,0 +1,14 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Modifier une commande{% endblock %}
+
+{% block body %}
+    <h1>Modifier une commande</h1>
+
+    {{ form_start(form) }}
+        {{ form_widget(form) }}
+        <button class="btn btn-success">Enregistrer les modifications</button>
+    {{ form_end(form) }}
+
+    <a href="{{ path('admin_orders_index') }}" class="btn btn-secondary">Retour à la liste</a>
+{% endblock %}

@@ -33,12 +33,13 @@ class Orders
     /**
      * @var Collection<int, OrdersDetails>
      */
-    #[ORM\OneToMany(targetEntity: OrdersDetails::class, mappedBy: 'orders', orphanRemoval: true)]
+    #[ORM\OneToMany(targetEntity: OrdersDetails::class, mappedBy: 'orders', orphanRemoval: true, cascade: ['persist'])]
     private Collection $ordersDetails;
 
     public function __construct()
     {
         $this->ordersDetails = new ArrayCollection();
+        $this->created_at = new \DateTimeImmutable();
     }
 
     public function getId(): ?int

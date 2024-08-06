@@ -1,0 +1,49 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Détails de la commande{% endblock %}
+
+{% block body %}
+    <h1>Détails de la commande</h1>
+
+    <table class="table">
+        <tr>
+            <th>ID</th>
+            <td>{{ order.id }}</td>
+        </tr>
+        <tr>
+            <th>Référence</th>
+            <td>{{ order.reference }}</td>
+        </tr>
+        <tr>
+            <th>Date de création</th>
+            <td>{{ order.createdAt|date('Y-m-d H:i') }}</td>
+        </tr>
+    </table>
+
+    <h2>Articles commandés</h2>
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Produit</th>
+                <th>Quantité</th>
+                <th>Prix</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for detail in order.ordersDetails %}
+                <tr>
+                    <td>{{ detail.products.name }}</td>
+                    <td>{{ detail.quantity }}</td>
+                    <td>{{ detail.price }}</td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+
+    <a href="{{ path('admin_orders_edit', {'id': order.id}) }}" class="btn btn-primary">Modifier</a>
+    <form method="post" action="{{ path('admin_orders_delete', {'id': order.id}) }}" style="display:inline-block;">
+        <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ order.id) }}">
+        <button class="btn btn-danger" onclick="return confirm('Êtes-vous sûr de vouloir supprimer cette commande ?');">Supprimer</button>
+    </form>
+    <a href="{{ path('admin_orders_index') }}" class="btn btn-secondary">Retour à la liste</a>
+{% endblock %}
