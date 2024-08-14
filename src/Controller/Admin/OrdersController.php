@@ -52,8 +52,15 @@ class OrdersController extends AbstractController
     #[Route('/{id}', name: 'show', methods: ['GET'])]
     public function show(Orders $order): Response
     {
+        // Calcul du total de la commande
+        $total = 0;
+        foreach ($order->getOrdersDetails() as $detail) {
+            $total += $detail->getPrice() * $detail->getQuantity();
+        }
+
         return $this->render('admin/orders/show.html.twig', [
             'order' => $order,
+            'total' => $total,
         ]);
     }
 

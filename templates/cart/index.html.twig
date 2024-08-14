@@ -1,79 +1,154 @@
 {% extends 'base.html.twig' %}
 
 {% block body %}
-    <main class="container">
-        <section class="row">
-            <div class="col-12">
-                <h1>Panier</h1>
-                <table class="table">
-                    <thead>
-                        <tr>
-                            <th>Produit</th>
-                            <th>Prix</th>
-                            <th>Quantité</th>
-                            <th>Total</th>
-                            <th>Action</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        {% for element in data %}
-                            <tr>
-                                <td>{{ element.product.name }}</td>
-                                <td>{{ element.product.price / 100 }} €</td>
-                                <td>{{ element.quantity }}</td>
-                                <td>{{ element.quantity * element.product.price / 100 }} €</td>
-                                <td>
-                                    <!-- AJAX Add -->
-                                    <button class="btn btn-success" data-action="add" data-product-id="{{ element.product.id }}">+</button>
-                                    <!-- AJAX Remove -->
-                                    <button class="btn btn-warning" data-action="remove" data-product-id="{{ element.product.id }}">-</button>
-                                    <!-- Remove from Cart -->
-                                    <a href="{{ path('cart_delete', {id: element.product.id}) }}" class="btn btn-danger">Supprimer</a>
-                                </td>
-                            </tr>
-                        {% else %}
-                            <tr>
-                                <td colspan="5">Votre panier est vide</td>
-                            </tr>    
-                        {% endfor %}
-                    </tbody>
-                    <tfoot>
-                        <tr>
-                            <td colspan="3">Total</td>
-                            <td>{{ total / 100 }} €</td>
-                            <td>
-                                <a href="{{ path('cart_empty') }}" class="btn btn-danger">Vider</a>
-                            </td>
-                        </tr>
-                    </tfoot>
-                </table>
-                <a href="{{ path('app_orders_add') }}" class="btn btn-primary">Valider le panier</a>
-            </div>
-        </section>
-    </main>
+<main>
+    <h1 class="oCart col-12 mt-4">Panier</h1>
+    <section class="row d-flex justify-content-center">
+        <!-- Colonne Panier -->
+        <div class="col-5 mt-4 ms-3">
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th>Produit</th>
+                        <th>Prix</th>
+                        <th>Quantité</th>
+                        <th>Total</th>
+                        <th>Action</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for element in data %}
+                    <tr>
+                        <td>{{ element.product.name }}</td>
+                        <td>{{ element.product.price / 100 }} €</td>
+                        <td>{{ element.quantity }}</td>
+                        <td>{{ element.quantity * element.product.price / 100 }} €</td>
+                        <td>
+                            <!-- AJAX Remove -->
+                            <button class="btn btn-white" data-action="remove"
+                                data-product-id="{{ element.product.id }}">-</button>
+                            <!-- AJAX Add -->
+                            <button class="btn btn-pink" data-action="add" data-product-id="{{ element.product.id }}">+</button>
+                           
+                            <!-- Remove from Cart -->
+                            <a href="{{ path('cart_delete', {id: element.product.id}) }}" class="btn btn-pink">Supprimer</a>
+                        </td>
+                    </tr>
+                    {% else %}
+                    <tr>
+                        <td colspan="5">Panier vide</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+                <tfoot>
+                    <tr>
+                        <td colspan="3">Total</td>
+                        <td>{{ total / 100 }} €</td>
+                        <td>
+                            <a href="{{ path('cart_empty') }}" class="btn btn-pink">Vider</a>
+                        </td>
+                    </tr>
+                </tfoot>
+            </table>
+           
+        </div>
+        
+        <!-- Colonne Informations Utilisateur -->
+        <div class="col-5 mt-4">
+            <div>
+                <div>
+                    <h4>Informations de l'utilisateur</h4>
+                    <p class="card-text">
+                        Nom: {{ app.user.lastname }}<br>
+                        Email: {{ app.user.email }}<br>
+                        Adresse actuelle: {{ app.user.address }}, {{ app.user.city }}<br>
+                    </p>
+                    <h6 class="card-title">Modifier l'adresse de livraison</h6>
+                    <form id="address-form" method="post" action="{{ path('cart_update_address') }}">
+                        <div class="mb-3 mt-3">
+                            <input type="text" placeholder="Nouvelle adresse" class="address" id="address"
+                                name="address" value="{{ app.user.address }}" required>
+                        </div>
+                        <div class="mb-3">
+                            <input type="text" placeholder="Code postal" class="address" id="zipcode" name="zipcode"
+                                value="{{ app.user.zipcode }}" required>
+                        </div>
+                        <div class="mb-3">
+                            <input type="text" placeholder="Ville" class="address" id="city" name="city"
+                                value="{{ app.user.city }}" required>
+                        </div>
+                        <button type="submit" class="btn btn-pink">Enregistrer</button> 
+                    </form>
+                </div>
+             
+            </div>   
+            
+        </div>
+        <div class="d-flex justify-content-center mt-5">
+            <a href="{{ path('app_orders_add') }}" class="btn btn-pink d-flex justify-content-center">Valider le panier</a>
+             </div>
+    </section>
+</main>
 
-    <script>
-        document.addEventListener('DOMContentLoaded', function() {
-            document.querySelectorAll('button[data-action]').forEach(button => {
-                button.addEventListener('click', function() {
-                    const action = this.getAttribute('data-action');
-                    const productId = this.getAttribute('data-product-id');
+<style>
+    .oCart {
+        text-align: center;
+        color: black;
+    }
 
-                    let url;
-                    if (action === 'add') {
-                        url = '{{ path('cart_add_ajax') }}';
-                    } else if (action === 'remove') {
-                        url = '{{ path('cart_remove_ajax') }}';
-                    }
+    .address {
+        padding: 15px;
+        border: 1px solid #ccc;
+        border-radius: 3px;
+        margin-bottom: 10px;
+        width: 100%;
+        box-sizing: border-box;
+        font-family: montserrat;
+        color: #2C3E50;
+        font-size: 13px;
+    }
+    .table{
+        height: 100%;
+    }
+    .btn-pink {
+        background-color: #ff66b2;
+        color: white;
+    }
+    .btn-white {
+        background-color: #ffff;
+        color: black;
+       border: solid 1px black;
+    }
+    .btn-pink:hover {
+        background-color: #ff3385;
+    }
+    .btn-white:hover {
+        background-color: #9f9f9f;
+    }
+</style>
 
-                    fetch(url, {
-                        method: 'POST',
-                        headers: {
-                            'Content-Type': 'application/json',
-                            'X-Requested-With': 'XMLHttpRequest',
-                        },
-                        body: JSON.stringify({ id: productId })
-                    })
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        document.querySelectorAll('button[data-action]').forEach(button => {
+            button.addEventListener('click', function () {
+                const action = this.getAttribute('data-action');
+                const productId = this.getAttribute('data-product-id');
+
+                let url;
+                if (action === 'add') {
+                    url = '{{ path('cart_add_ajax') }}';
+                } else if (action === 'remove') {
+                    url = '{{ path('cart_remove_ajax') }}';
+                }
+
+                fetch(url, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'X-Requested-With': 'XMLHttpRequest',
+                    },
+                    body: JSON.stringify({ id: productId })
+                })
                     .then(response => response.json())
                     .then(data => {
                         if (data.success) {
@@ -86,8 +161,8 @@
                         console.error('Erreur:', error);
                         alert('Erreur lors de la mise à jour du panier.');
                     });
-                });
             });
         });
-    </script>
+    });
+</script>
 {% endblock %}

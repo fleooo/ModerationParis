@@ -28,8 +28,8 @@ class Products
     #[Assert\Length(
         min: 3,
         max: 255,
-        minMessage: 'le nom du produit doit contenir au moins {{limit}} caracteres',
-        maxMessage: 'le nom du produit ne peut pas contenir plus de {{limit}} caracteres'
+        minMessage: 'le nom du produit doit contenir au moins {{ limit }} caracteres',
+        maxMessage: 'le nom du produit ne peut pas contenir plus de {{ limit }} caracteres'
         
     )]
 

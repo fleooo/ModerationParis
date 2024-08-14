@@ -7,8 +7,8 @@
 
     {{ form_start(form) }}
         {{ form_widget(form) }}
-        <button class="btn btn-success">{{ form.vars.value.id ? 'Enregistrer les modifications' : 'Créer' }}</button>
+        <button class="btn">{{ form.vars.value.id ? 'Enregistrer les modifications' : 'Créer' }}</button>
     {{ form_end(form) }}
 
-    <a href="{{ path('admin_orders_index') }}" class="btn btn-secondary">Retour à la liste</a>
+    <a href="{{ path('admin_orders_index') }}" class="btn">Retour à la liste</a>
 {% endblock %}

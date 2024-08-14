@@ -1,11 +1,14 @@
 <?php
+
 namespace App\Controller;
 
 use App\Entity\Products;
 use App\Repository\ProductsRepository;
+use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Session\SessionInterface;
 use Symfony\Component\Routing\Annotation\Route;
 
@@ -17,7 +20,6 @@ class CartController extends AbstractController
     {
         $panier = $session->get('panier', []);
 
-        // On initialise des variables
         $data = [];
         $total = 0;
 
@@ -32,7 +34,7 @@ class CartController extends AbstractController
                 $total += $product->getPrice() * $quantity;
             }
         }
-        
+
         return $this->render('cart/index.html.twig', compact('data', 'total'));
     }
 
@@ -41,23 +43,27 @@ class CartController extends AbstractController
     {
         $data = json_decode($request->getContent(), true);
         $id = $data['id'] ?? null;
+        $quantity = $data['quantity'] ?? 1;
 
-        if ($id) {
-            $product = $productsRepository->find($id);
-            if ($product) {
-                $panier = $session->get('panier', []);
-                if (empty($panier[$id])) {
-                    $panier[$id] = 1;
-                } else {
-                    $panier[$id]++;
-                }
-                $session->set('panier', $panier);
-
-                return new JsonResponse(['success' => true, 'message' => 'Produit ajouté au panier !']);
-            }
+        // Validation des données reçues
+        if (!$id || $quantity < 1) {
+            return new JsonResponse(['success' => false, 'message' => 'Données invalides.'], 400);
         }
 
-        return new JsonResponse(['success' => false, 'message' => 'Erreur lors de l\'ajout au panier.'], 400);
+        $product = $productsRepository->find($id);
+        if (!$product) {
+            return new JsonResponse(['success' => false, 'message' => 'Produit non trouvé.'], 404);
+        }
+
+        $panier = $session->get('panier', []);
+        if (isset($panier[$id])) {
+            $panier[$id] += $quantity;
+        } else {
+            $panier[$id] = $quantity;
+        }
+        $session->set('panier', $panier);
+
+        return new JsonResponse(['success' => true, 'message' => 'Produit ajouté au panier !']);
     }
 
     #[Route('/remove', name: 'remove_ajax', methods: ['POST'])]
@@ -66,50 +72,76 @@ class CartController extends AbstractController
         $data = json_decode($request->getContent(), true);
         $id = $data['id'] ?? null;
 
-        if ($id) {
-            $product = $productsRepository->find($id);
-            if ($product) {
-                $panier = $session->get('panier', []);
-                if (!empty($panier[$id])) {
-                    if ($panier[$id] > 1) {
-                        $panier[$id]--;
-                    } else {
-                        unset($panier[$id]);
-                    }
-                    $session->set('panier', $panier);
-
-                    return new JsonResponse(['success' => true, 'message' => 'Quantité de produit diminuée.']);
-                }
-            }
+        // Validation des données reçues
+        if (!$id) {
+            return new JsonResponse(['success' => false, 'message' => 'Données invalides.'], 400);
         }
 
-        return new JsonResponse(['success' => false, 'message' => 'Erreur lors de la suppression du produit.'], 400);
+        $product = $productsRepository->find($id);
+        if (!$product) {
+            return new JsonResponse(['success' => false, 'message' => 'Produit non trouvé.'], 404);
+        }
+
+        $panier = $session->get('panier', []);
+        if (isset($panier[$id])) {
+            if ($panier[$id] > 1) {
+                $panier[$id]--;
+            } else {
+                unset($panier[$id]);
+            }
+            $session->set('panier', $panier);
+
+            return new JsonResponse(['success' => true, 'message' => 'Quantité de produit diminuée.']);
+        }
+
+        return new JsonResponse(['success' => false, 'message' => 'Produit non présent dans le panier.'], 400);
     }
 
     #[Route('/delete/{id}', name: 'delete')]
-    public function delete(Products $product, SessionInterface $session)
+    public function delete(Products $product, SessionInterface $session): RedirectResponse
     {
-        // On récupère l'id du produit
         $id = $product->getId();
-
-        // On récupère le panier existant
         $panier = $session->get('panier', []);
 
-        if (!empty($panier[$id])) {
+        if (isset($panier[$id])) {
             unset($panier[$id]);
+            $session->set('panier', $panier);
         }
 
-        $session->set('panier', $panier);
-        
-        // On redirige vers la page du panier
         return $this->redirectToRoute('cart_index');
     }
 
     #[Route('/empty', name: 'empty')]
-    public function empty(SessionInterface $session)
+    public function empty(SessionInterface $session): RedirectResponse
     {
         $session->remove('panier');
 
         return $this->redirectToRoute('cart_index');
+    }
+
+    #[Route('/update-address', name: 'update_address', methods: ['POST'])]
+    public function updateAddress(Request $request, EntityManagerInterface $entityManager): RedirectResponse
+    {
+        $user = $this->getUser();
+
+        // Récupération des nouvelles valeurs du formulaire
+        $newAddress = $request->request->get('address');
+        $newZipcode = $request->request->get('zipcode');
+        $newCity = $request->request->get('city');
+
+        // Validation des données si nécessaire
+        if ($newAddress && $newZipcode && $newCity) {
+            $user->setAddress($newAddress);
+            $user->setZipcode($newZipcode);
+            $user->setCity($newCity);
+
+            // Enregistrer les modifications en base de données
+            $entityManager->persist($user);
+            $entityManager->flush();
+
+            return $this->redirectToRoute('cart_index');
+        }
+
+        return new JsonResponse(['success' => false, 'message' => 'Données invalides.'], 400);
     }
 }

@@ -18,6 +18,14 @@
             <th>Date de création</th>
             <td>{{ order.createdAt|date('Y-m-d H:i') }}</td>
         </tr>
+        <tr>
+            <th>Nom du client</th>
+            <td>{{ order.users.lastname }}</td>
+        </tr>
+        <tr>
+            <th>Adresse de livraison</th>
+            <td>{{ order.users.address }}</td>
+        </tr>
     </table>
 
     <h2>Articles commandés</h2>
@@ -34,16 +42,20 @@
                 <tr>
                     <td>{{ detail.products.name }}</td>
                     <td>{{ detail.quantity }}</td>
-                    <td>{{ detail.price }}</td>
+                    <td>{{ detail.price / 100 }}€</td>
                 </tr>
             {% endfor %}
+            <tr>
+            <th>Total</th>
+            <td>{{ total / 100 }}€</td>
+        </tr>
         </tbody>
     </table>
 
-    <a href="{{ path('admin_orders_edit', {'id': order.id}) }}" class="btn btn-primary">Modifier</a>
+    <a href="{{ path('admin_orders_edit', {'id': order.id}) }}" class="btn">Modifier</a>
     <form method="post" action="{{ path('admin_orders_delete', {'id': order.id}) }}" style="display:inline-block;">
         <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ order.id) }}">
-        <button class="btn btn-danger" onclick="return confirm('Êtes-vous sûr de vouloir supprimer cette commande ?');">Supprimer</button>
+        <button class="btn" onclick="return confirm('Êtes-vous sûr de vouloir supprimer cette commande ?');">Supprimer</button>
     </form>
-    <a href="{{ path('admin_orders_index') }}" class="btn btn-secondary">Retour à la liste</a>
+    <a href="{{ path('admin_orders_index') }}" class="btn">Retour à la liste</a>
 {% endblock %}

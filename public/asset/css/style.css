@@ -1,5 +1,5 @@
 body {
-    background-color: #f9efef;
+    background-color: #F9EFEF;
     font-family: "Montserrat", sans-serif;
 }
 img{
@@ -114,7 +114,11 @@ a{
 .carousel-item .card {
     width: 18rem; /* Adjust width as needed */
 }
-.titreCat{
-    font-style: italic;
+body {
+    background-color: #F9EFEF;
+    font-family: "Montserrat", sans-serif;
+}
+.oCart{
     text-align: center;
+    color: #F9EFEF;
 }

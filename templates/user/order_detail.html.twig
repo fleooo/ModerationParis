@@ -1,0 +1,50 @@
+{# templates/user/order_detail.html.twig #}
+
+{% extends 'base.html.twig' %}
+
+{% block title %}Détails de la Commande{% endblock %}
+
+{% block body %}
+    <h1>Détails de la Commande</h1>
+
+    <table class="table">
+        <tr>
+            <th>ID</th>
+            <td>{{ order.id }}</td>
+        </tr>
+        <tr>
+            <th>Référence</th>
+            <td>{{ order.reference }}</td>
+        </tr>
+        <tr>
+            <th>Date de Création</th>
+            <td>{{ order.createdAt|date('Y-m-d H:i') }}</td>
+        </tr>
+    </table>
+
+    <h2>Articles Commandés</h2>
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Produit</th>
+                <th>Quantité</th>
+                <th>Prix</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for detail in order.ordersDetails %}
+                <tr>
+                    <td>{{ detail.products.name }}</td>
+                    <td>{{ detail.quantity }}</td>
+                    <td>{{ detail.price }}</td>
+                </tr>
+            {% else %}
+                <tr>
+                    <td colspan="3">Aucun détail de commande trouvé</td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+
+    <a href="{{ path('user_orders') }}" class="btn">Retour à l'historique</a>
+{% endblock %}

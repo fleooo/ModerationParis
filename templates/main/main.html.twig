@@ -1,14 +1,24 @@
 {% extends 'base.html.twig' %}
 
 {% block body %}
-<main class="container">
+<main >
     <section class="row">
         <div class="col-12">
             <h1>Site e-commerce</h1>
             <p>Bienvenue dans notre boutique</p>
-            <a href="{{ path('app_parents_categories', {slug: 'avec-moderations'}) }}" class="btn">Avec modérations</a>
-            <a href="{{ path('app_parents_categories', {slug: 'sans-moderations'}) }}" class="btn">Sans modérations</a>
+            <a href="{{ path('app_parents_categories', {slug: 'avec-moderations'}) }}" class="btn back-yellow">Avec modérations</a>
+            <a href="{{ path('app_parents_categories', {slug: 'sans-moderations'}) }}" class="btn back-blue">Sans modérations</a>
         </div>
     </section>
 </main>
+<style>
+
+    .back-blue {
+        background-color: #2176FF;
+    }
+    .back-yellow {
+        background-color: #F7B538;
+    }
+
+</style>
 {% endblock %}

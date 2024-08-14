@@ -3,23 +3,84 @@
 {% block title %}Liste des produits de la catégorie {{ category.name }}{% endblock %}
 
 {% block body %}
-<main class="container">
-        <section class="row">
-            <div class="col-12">
-                <h1 class="titreCat">{{ category.name }}</h1>
-            </div>
-            {% for product in products%}
-                <div class="col-3 mb-3">
-                    <article class="card h-100">
-                    <img src="{{ asset('asset/uploads/products/' ~ product.images[0].name ) }}" class="card-img-top" alt="{{ product.name }}">
-                        <div class="card-body">
-                            <h2 class="card-title">{{ product.name }}</h2>
-                            <p class="card-text">{{ product.description }}</p>
-                            <a href="{{ path('products_details', {"slug": product.slug }) }}" class="btn">Voir les détails</a>
-                        </div>
-                    </article>
+<main >
+    <section class="row">
+        <div class="col-12">
+            <h1 class="titreCat">{{ category.name }}</h1>
+        </div>
+        {% for product in products %}
+        <div class="col-2 mt-5">
+            <!-- Rendre l'ensemble de l'article cliquable pour accéder aux détails -->
+            <a href="{{ path('products_details', {'slug': product.slug }) }}" class="text-decoration-none">
+                <img src="{{ asset('asset/uploads/products/' ~ product.images[0].name ) }}" class="card-img-top rounded-5"
+                    alt="{{ product.name }}">
+            </a>
+            <div class="card-body">
+                <!-- Flexbox container pour aligner la catégorie et le prix -->
+                <div class="d-flex justify-content-between mt-2">
+                    <b class="titreCat">{{ category.name }}</b>
+                    <p class="card-title">{{ product.price / 100 }}€</p>
                 </div>
-            {% endfor %}
-        </section>
-    </main>
+                <p class="card-title">{{ product.name }}</p>
+            </div>
+            <!-- Bouton pour ajouter au panier -->
+            <div class="mt-2">
+                {% if product.stock > 0 %}
+                <div class='abtn'>
+                    <button id="add-to-cart" data-product-id="{{ product.id }}" class="add-to-cart-btn addbtn">+</button>
+                </div>
+                {% else %}
+                <p class="text-danger">Temporairement en rupture de stock</p>
+                {% endif %}
+            </div>
+        </div>
+        {% endfor %}
+    </section>
+</main>
+
+<!-- JavaScript pour gérer l'ajout au panier via AJAX -->
+<script>
+    document.querySelectorAll('.add-to-cart-btn').forEach(button => {
+        button.addEventListener('click', function (event) {
+            event.preventDefault(); // Empêcher le lien de suivre sa destination
+            const productId = this.dataset.productId;
+
+            fetch('{{ path('cart_add_ajax') }}', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-Requested-With': 'XMLHttpRequest' // Pour AJAX
+                },
+                body: JSON.stringify({ id: productId })
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    alert(data.message);
+                    // Mettez à jour l'affichage du panier si nécessaire
+                } else {
+                    alert('Erreur : ' + data.message);
+                }
+            })
+            .catch(error => {
+                console.error('Erreur:', error);
+            });
+        });
+    });
+</script>
+<style>
+h1{
+    text-align: center;
+}
+.addbtn{
+    background-color: #FF88DC;
+    color: #1E2A6A;
+    border-radius: 60%;
+    border: none;
+}
+.abtn{
+    display: flex;
+    justify-content: end;
+}
+</style>
 {% endblock %}

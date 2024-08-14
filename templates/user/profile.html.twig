@@ -1,0 +1,26 @@
+{# templates/user/profile.html.twig #}
+
+{% extends 'base.html.twig' %}
+
+{% block title %}Mon Profil{% endblock %}
+
+{% block body %}
+    <h1>Mon Profil</h1>
+
+    <table class="table">
+        <tr>
+            <th>Nom et Prenom</th>
+            <td>{{ user.lastname }} {{ user.firstname }}</td>
+        </tr>
+        <tr>
+            <th>Email</th>
+            <td>{{ user.email }}</td>
+        </tr>
+        <tr>
+            <th>Créé le</th>
+            <td>{{ user.createdAt|date('Y-m-d H:i') }}</td>
+        </tr>
+    </table>
+
+    <a href="{{ path('user_orders') }}" class="btn">Voir mes commandes</a>
+{% endblock %}

@@ -1,0 +1,38 @@
+{# templates/user/orders.html.twig #}
+
+{% extends 'base.html.twig' %}
+
+{% block title %}Mon Historique de Commandes{% endblock %}
+
+{% block body %}
+    <h1>Mon Historique de Commandes</h1>
+
+    <table class="table">
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>Référence</th>
+                <th>Date de Création</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for order in orders %}
+                <tr>
+                    <td>{{ order.id }}</td>
+                    <td>{{ order.reference }}</td>
+                    <td>{{ order.createdAt|date('Y-m-d H:i') }}</td>
+                    <td>
+                        <a href="{{ path('user_order_detail', {'id': order.id}) }}" class="btn">Détails</a>
+                    </td>
+                </tr>
+            {% else %}
+                <tr>
+                    <td colspan="4">Aucune commande trouvée</td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+
+    <a href="{{ path('user_profile') }}" class="btn">Retour au profil</a>
+{% endblock %}
