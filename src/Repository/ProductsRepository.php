@@ -16,6 +16,21 @@ class ProductsRepository extends ServiceEntityRepository
         parent::__construct($registry, Products::class);
     }
 
+    /**
+     * Rechercher des produits par nom ou description
+     * @param string $query
+     * @return Products[] Returns an array of Products objects
+     */
+    public function searchProducts(string $query): array
+    {
+        $qb = $this->createQueryBuilder('p')
+            ->where('p.name LIKE :query')
+            ->setParameter('query', '%'.$query.'%')
+            ->orderBy('p.name', 'ASC');
+
+        return $qb->getQuery()->getResult();
+    }
+
     // public function findProductsPaginated(int $page, string $slug, int $limit = 6): array{
     //     $limit = abs($limit);
 

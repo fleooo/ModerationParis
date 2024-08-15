@@ -1,0 +1,85 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Résultats de la recherche{% endblock %}
+
+{% block body %}
+<main>
+    <section class="row">
+        <div class="col-12">
+            <h1 class="titreCat">Résultats pour "{{ query }}"</h1>
+        </div>
+        {% if results is empty %}
+            <div class="col-12 mt-5">
+                <p>Aucun produit trouvé pour "{{ query }}"</p>
+            </div>
+        {% else %}
+            {% for product in results %}
+            <div class="col-2 mt-5">
+                <a href="{{ path('products_details', {'slug': product.slug }) }}" class="text-decoration-none">
+                    <img src="{{ asset('asset/uploads/products/' ~ product.images[0].name ) }}" class="card-img-top rounded-5" alt="{{ product.name }}">
+                </a>
+                <div class="card-body">
+                    <div class="d-flex justify-content-between mt-2">
+                        <b class="titreCat">{{ product.categories.name }}</b>
+                        <p class="card-title">{{ product.price / 100 }}€</p>
+                    </div>
+                    <p class="card-title">{{ product.name }}</p>
+                </div>
+                <div class="mt-2">
+                    {% if product.stock > 0 %}
+                    <div class='abtn'>
+                        <button id="add-to-cart" data-product-id="{{ product.id }}" class="add-to-cart-btn addbtn">+</button>
+                    </div>
+                    {% else %}
+                    <p class="text-danger">Temporairement en rupture de stock</p>
+                    {% endif %}
+                </div>
+            </div>
+            {% endfor %}
+        {% endif %}
+    </section>
+</main>
+<script>
+    document.querySelectorAll('.add-to-cart-btn').forEach(button => {
+        button.addEventListener('click', function (event) {
+            event.preventDefault(); // Empêcher le lien de suivre sa destination
+            const productId = this.dataset.productId;
+
+            fetch('{{ path('cart_add_ajax') }}', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-Requested-With': 'XMLHttpRequest' // Pour AJAX
+                },
+                body: JSON.stringify({ id: productId })
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    alert(data.message);
+                    // Mettez à jour l'affichage du panier si nécessaire
+                } else {
+                    alert('Erreur : ' + data.message);
+                }
+            })
+            .catch(error => {
+                console.error('Erreur:', error);
+            });
+        });
+    });
+</script>
+<style>
+h1{
+    text-align: center;
+}
+.addbtn{
+    background-color: #FF88DC;
+    color: #1E2A6A;
+    border-radius: 60%;
+    border: none;
+}
+.abtn{
+    display: flex;
+    justify-content: end;
+}
+{% endblock %}
