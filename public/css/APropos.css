@@ -1,0 +1,39 @@
+/* Nassim css ''a propos de nous'' */
+h1{
+    text-align: center;
+    }
+
+p{
+    text-align: center;
+    margin-left: 20px;
+ }
+.conteneur {
+    display: flex;
+    align-items: center; /* Aligne verticalement l'image et le texte au centre */
+}
+.image {
+    margin-right: 40px; /* Espace entre l'image et le texte */
+}
+
+
+h2{
+    margin-left: 20px;
+}
+
+#textAPropos{
+    text-align: left;
+}
+
+#titreContact{
+    text-align: center;
+}
+
+.body{
+    background-color: #f9efef;
+}
+
+#rem{
+    font-weight: bold;
+    color: blueviolet;
+
+}

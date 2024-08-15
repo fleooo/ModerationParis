@@ -1,0 +1,115 @@
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+  }
+  
+  body {
+    font-family: Arial, sans-serif;
+  }
+  
+  .navbar {
+    background-color: #1E2A64;
+    padding: 1rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+  
+  .logo {
+    margin-right: 20px;
+  }
+  
+  .logo img {
+    width: 68px; /* Augmentez la largeur selon vos besoins */
+    height: auto; /* Conservez l'aspect ratio original */
+  }
+  
+  .search-bar {
+    background-color: #fff;
+    border: none;
+    border-radius: 20px;
+    padding: 5px;
+    display: flex;
+    align-items: center;
+    width: 250px; /* Ajustez cette valeur pour la taille désirée */
+    justify-content: center;
+    margin-left: 260px; /* Ajustez la marge gauche pour déplacer la barre de recherche */
+  }
+  
+  
+  .search-bar input[type="search"] {
+    width: 115%;
+    padding: 5px;
+    font-size: 14px; /* Réduisez la taille de la police */
+    border: none;
+    border-radius: 50px;
+    background-color: transparent;
+    color: #333;
+  }
+  
+  .nav-links {
+    display: flex;
+    gap: 15px; /* Ajustez cet espace selon vos besoins */
+  }
+  
+  .nav-link {
+    font-size: 16px;
+    color: #fff;
+    text-decoration: none;
+    transition: color 0.2s ease;
+    padding: 10px;
+  }
+  
+  .nav-link:hover {
+    color: #ccc;
+  }
+  
+  .beautiful-button {
+    position: relative;
+    display: inline-block;
+    background-color: #fff;
+    color: #1E2A64; 
+    font-family: "Segoe UI", sans-serif;
+    font-weight: bold;
+    font-size: 14px; /* Ajustez la taille de la police pour correspondre à celle de la barre de recherche */
+    border: none;
+    border-radius: 20px; /* Ajustez le rayon des coins pour correspondre à celui de la barre de recherche */
+    padding: 5px; /* Ajustez le padding pour correspondre à celui de la barre de recherche */
+    width: 150px; /* Ajustez cette valeur pour correspondre à la largeur de la barre de recherche */
+    height: 34px; /* Ajustez cette valeur pour correspondre à la hauteur de la barre de recherche */
+    cursor: pointer;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+    animation: button-shimmer 2s infinite;
+    transition: all 0.3s ease-in-out;
+  }
+  
+  .beautiful-button:hover {
+    background-color: #fff;
+    animation: button-particles 1s ease-in-out infinite;
+    transform: translateY(-2px);
+  }
+  
+  .beautiful-button:active {
+    transform: scale(0.95);
+    box-shadow: 0 2px 10px rgb(245, 0, 0);
+  }
+  
+  @keyframes button-shimmer {
+    0% {
+      background-position: left top;
+    }
+    100% {
+      background-position: right bottom;
+    }
+  }
+  
+  @keyframes button-particles {
+    0% {
+      background-position: left top;
+    }
+    100% {
+      background-position: right bottom;
+    }
+  }

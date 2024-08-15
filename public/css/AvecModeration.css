@@ -1,0 +1,15 @@
+/* Ajoutez les styles personnalisés ici */
+.avecmoderation {
+    background-color: #f7b538;
+    text-align: center;
+    color: whitesmoke;
+}
+
+body {
+background-color: #f9efef;
+
+}
+
+.image-avec-moderation img{
+width: 55%;
+}
