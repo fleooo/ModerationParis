@@ -1,0 +1,17 @@
+/* Ajoutez les styles personnalisés ici */
+        .sansmoderation {
+            background-color: #2176ff;
+            text-align: center;
+            color: whitesmoke;
+        }
+        
+body {
+    background-color: #f9efef;
+
+}
+
+.image-sans-moderation img{
+    width: 55%;
+}
+
+
