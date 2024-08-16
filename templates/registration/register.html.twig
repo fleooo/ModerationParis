@@ -6,46 +6,230 @@
 {% for flash_error in app.flashes('verify_email_error') %}
 <div class="alert alert-danger" role="alert">{{ flash_error }}</div>
 {% endfor %}
-<section>
-    <div class="row">
-        <h1>Inscription</h1>
-        <div class="col"></div>
-        <div class="col">
-            {{ form_errors(registrationForm) }}
-            {{ form_start(registrationForm) }}
-            <fieldset>
-                {{ form_row(registrationForm.firstname) }}
-                {{ form_row(registrationForm.lastname) }}
-                {{ form_row(registrationForm.email) }}
-            </fieldset>
+<body>
+    <form class="form">
+        <h1 class="title">Inscription</h1>
+        <p class="message">Inscrivez-vous maintenant et obtenez un accès complet à notre application.</p>
+
+        <div class="form-content">
+            {{ form_start(registrationForm, {'attr': {'class': 'form'}}) }}
+            
+            <div class="flex">
+                <label for="firstname" class="input-group">
+                    {{ form_widget(registrationForm.firstname, {'attr': {'class': 'input', 'aria-label': 'Prénom'}}) }}
+                    <span>Prénom</span>
+                </label>
+                <label for="lastname" class="input-group">
+                    {{ form_widget(registrationForm.lastname, {'attr': {'class': 'input', 'aria-label': 'Nom de famille'}}) }}
+                    <span>Nom de famille</span>
+                </label>
+            </div>
+            
+            <label for="email" class="input-group">
+                {{ form_widget(registrationForm.email, {'attr': {'class': 'input', 'aria-label': 'E-mail'}}) }}
+                <span>E-mail</span>
+            </label>
+            
+            <label for="plainPassword" class="input-group">
+                {{ form_widget(registrationForm.password.first, {'attr': {'class': 'input', 'aria-label': 'Mot de passe'}}) }}
+                <span>Mot de passe</span>
+            </label>
+            <label for="plainPassword" class="input-group">
+                {{ form_widget(registrationForm.password.second, {'attr': {'class': 'input', 'aria-label': 'Confirmer Mot de passe'}}) }}
+                <span>Confirmer Mot de passe</span>
+            </label>
+            
+            <label for="city" class="input-group">
+                {{ form_widget(registrationForm.city, {'attr': {'class': 'input', 'aria-label': 'Ville'}}) }}  
+                <span>Ville</span>
+            </label>
+            
+            <label for="address" class="input-group">
+                {{ form_widget(registrationForm.address, {'attr': {'class': 'input', 'aria-label': 'Adresse'}}) }}  
+                <span>Adresse</span>
+            </label>
+            
+            <label for="zipcode" class="input-group">
+                {{ form_widget(registrationForm.zipcode, {'attr': {'class': 'input', 'aria-label': 'Code postal'}}) }}  
+                <span>Code postal</span>
+            </label>
+            
+            <label for="rgpdConsent" class="checkbox mt-2">
+                {{ form_widget(registrationForm.RgpdConsent, {'attr': {'class': 'checkbox-input', 'aria-label': 'Consentement RGPD'}}) }}
+                <span>J'accepte les termes et conditions</span>
+            </label>
+            <div class="confirmBtn">
+            <button type="submit" class="submit mt-2">Confirmation</button>
+            </div>
+            <p class="signin mt-2">Vous avez déjà un compte ? <a href="{{ path('app_login') }}">Connectez-vous</a></p>
+            {{ form_end(registrationForm) }}
         </div>
-        <div class="col">
-            <fieldset>
-                {{ form_row(registrationForm.address) }}
-                {{ form_row(registrationForm.city) }}
-                {{ form_row(registrationForm.zipcode) }}
-            </fieldset>
-        </div>
-        <div class="col"></div>
-    </div>
-    <div class="row">
-        <div class="col"></div>
-        <div class="col"></div>
-        <div class="col">
-            {{ form_row(registrationForm.password) }}
-            {{ form_row(registrationForm.RgpdConsent) }}
-        <div class="">
-            <button type="submit" class="btn btn-lg ">S'inscire</button>  
-            <a href="{{path('app_login')}}" class="btn btn-lg">Me connecter</a>
-        </div>   
-        </div> 
-        <div class="col"></div>
-        <div class="col"></div>
-    </div>
-    
-        
-           
-    {{ form_end(registrationForm) }}
-</section>
+    </form>
+</body>
+
+<style>
+    /* Amélioration des styles */
+
+    .form {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        flex-direction: column;
+        gap: 25px;
+        max-width: 450px;
+        width: 100%;
+        padding: 25px;
+        margin: 0 auto;
+        border-radius: 10px;
+        background-color: #1E2A6A;
+        color: #fff;
+        border: 1px solid #333;
+        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.15);
+        transition: transform 0.3s ease;
+    }
+
+    .form-content {
+        width: 100%;
+    }
+
+    .form:hover {
+        transform: translateY(-2px);
+    }
+
+    .title {
+        font-size: 32px;
+        font-weight: 700;
+        letter-spacing: -0.5px;
+        color: #F9EFEF;
+        position: relative;
+    }
+
+    .title::before,
+    .title::after {
+        position: absolute;
+        content: "";
+        height: 18px;
+        width: 18px;
+        border-radius: 50%;
+        left: -15%;
+        margin-top: 5%;
+        background-color: #FF88DC;
+    }
+
+    .title::after {
+        animation: pulse 1.5s linear infinite;
+    }
+
+    .message, 
+    .signin {
+        font-size: 16px;
+        color: rgba(255, 255, 255, 0.75);
+    }
+
+    .signin {
+        text-align: center;
+    }
+
+    .signin a {
+        color: #FF88DC;
+        text-decoration: none;
+        transition: text-decoration 0.3s ease, color 0.3s ease;
+    }
+
+    .signin a:hover {
+        text-decoration: underline;
+        color: #f821b7;
+    }
+
+    .flex {
+        display: flex;
+        gap: 15px;
+    }
+
+    .input-group {
+        position: relative;
+        margin-bottom: 20px;
+        width: 100%;
+    }
+
+    .input-group .input {
+        background-color: #F9EFEF;
+        color: #000;
+        width: 100%;
+        padding: 20px 10px 10px;
+        border: 1px solid #FF88DC;
+        border-radius: 8px !important;  /* Bord arrondi forcé */
+        outline: 0;
+        transition: border-color 0.3s ease;
+    }
+
+    .input-group .input:focus {
+        border-color: #f821b7;
+    }
+
+    .input-group .input + span {
+        color: #2176FF;
+        position: absolute;
+        left: 12px;
+        top: 8px;
+        font-size: 0.9em;
+        cursor: text;
+        transition: top 0.3s ease, font-size 0.3s ease;
+    }
+
+    .input-group .input:placeholder-shown + span {
+        top: 20px;
+        font-size: 1em;
+    }
+
+    .input-group .input:focus + span,
+    .input-group .input:valid + span {
+        top: 8px;
+        font-size: 0.8em;
+        font-weight: 600;
+    }
+
+    .submit {
+        border: none;
+        padding: 12px;
+        border-radius: 8px !important;  /* Bord arrondi forcé */
+        color: #fff;
+        font-size: 18px;
+        background-color: #FF88DC;
+        cursor: pointer;
+        transition: background-color 0.3s ease, transform 0.2s ease;
+    }
+  .confirmBtn{
+    display: flex;
+    justify-content: center;
+  }
+    .submit:hover {
+        background-color: #f821b7;
+        transform: translateY(-2px);
+    }
+
+    .checkbox {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        margin-top: 20px;
+    }
+
+    .checkbox-input {
+        margin-right: 10px;
+        accent-color: #FF88DC;
+    }
+
+    @keyframes pulse {
+        from {
+            transform: scale(0.9);
+            opacity: 1;
+        }
+        to {
+            transform: scale(1.8);
+            opacity: 0;
+        }
+    }
+</style>
 
 {% endblock %}

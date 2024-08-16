@@ -1,23 +1,66 @@
 {% extends 'base.html.twig' %}
 
 {% block body %}
-<main >
-    <section class="row">
-        <div class="col-12">
-            <h1>Site e-commerce</h1>
-            <p>Bienvenue dans notre boutique</p>
-            <a href="{{ path('app_parents_categories', {slug: 'avec-moderations'}) }}" class="btn back-yellow">Avec modérations</a>
-            <a href="{{ path('app_parents_categories', {slug: 'sans-moderations'}) }}" class="btn back-blue">Sans modérations</a>
-        </div>
-    </section>
+<main>
+            <div class="center-content">
+                <h1>Moderation Paris </h1>
+                <h3>On livre tout pour vos soirées, sauf la modération !! 7/7j de 18h à 7h en moins de 30 minutes.</h3>
+                <br>
+            
+            <a href="{{ path('app_parents_categories', {slug: 'avec-moderations'}) }}" class="btn back-yellow">Avec
+                modérations</a>
+            <a href="{{ path('app_parents_categories', {slug: 'sans-moderations'}) }}" class="btn back-blue">Sans
+                modérations</a>
+       
+    
+            
+    <div class="carousel-container mt-5">
+        <h4>Nos catégories :</h4>
+        <!-- Carousel -->
+            <div id="slider-container">
+                <span onclick="slideRight()" class="btn"></span>
+                <div id="slider">
+                    <div class="slide"><img src="Images/gins.png" alt="Gins"></div>
+                    <div class="slide"><img src="Images/rhum.png" alt="Rhum"></div>
+                    <div class="slide"><img src="Images/tequila.png" alt="Tequila"></div>
+                    <div class="slide"><img src="Images/vodka.png" alt="Vodka"></div>
+                    <div class="slide"><img src="Images/whiskey.png" alt="Whiskey"></div>
+                    <div class="slide"><img src="Images/whiskey.png" alt="Whiskey"></div>
+                    <div class="slide"><img src="Images/vodka.png" alt="Vodka"></div>
+                    <div class="slide"><img src="Images/tequila.png" alt="Tequila"></div>
+                    <div class="slide"><img src="Images/rhum.png" alt="Rhum"></div>
+                    <div class="slide"><img src="Images/gins.png" alt="Gins"></div>
+                    <div class="slide"><img src="Images/tequila.png" alt="Tequila"></div>
+                    <div class="slide"><img src="Images/rhum.png" alt="Rhum"></div>
+                    <div class="slide"><img src="Images/gins.png" alt="Gins"></div>
+                    <div class="slide"><img src="Images/tequila.png" alt="Tequila"></div>
+                    <div class="slide"><img src="Images/rhum.png" alt="Rhum"></div>
+                    <div class="slide"><img src="Images/gins.png" alt="Gins"></div>
+                </div>
+                <span onclick="slideLeft()" class="btn"></span>
+            </div>
+    </div>
+ </div>
+    <script src="assets/pageAccueil.js"></script>
 </main>
 <style>
+.center-content{
+    text-align: center;
 
+}
     .back-blue {
         background-color: #2176FF;
     }
+
     .back-yellow {
         background-color: #F7B538;
+    }
+    .back-blue:hover {
+        background-color: #0661f5;
+    }
+
+    .back-yellow:hover {
+        background-color: #f8a916;
     }
 
 </style>

@@ -1,0 +1,128 @@
+
+    <footer class="footer">
+        <div class="prev">
+            <b>L’abus d’alcool est dangereux pour la santé, à consommer avec moderation. La consommation
+                d’alcool est vivement déconseillée aux femmes enceintes. La vente d’alcool a des mineurs est interdite.
+                En accédant a nos offres, vous déclarez avoir 18 ans révolus.
+            </b>
+        </div>
+        <div class="footer-bottom row">
+            <img src="#" alt="gouverenment" class="mt-3">
+            <b class="mt-3"><a href="/page/avec-moderations" class="footer-link">Avec-Moderations</a>/<a
+                    href="/page/sans-moderations" class="footer-link">Sans-Moderations</a></b>
+            <div class="col-2"><img src="#" alt="logo"></div>
+            <div class="col-2"></div>
+            <div class="footer-section social-media col-4">
+                <p class="mt-3">
+                    <a href="#" class="social-icon">
+                        <img src="path/to/facebook-icon.svg" alt="Facebook">
+                    </a>
+                    <a href="#" class="social-icon">
+                        <img src="path/to/twitter-icon.svg" alt="Twitter">
+                    </a>
+                    <a href="#" class="social-icon">
+                        <img src="path/to/instagram-icon.svg" alt="Instagram">
+                    </a>
+                </p>
+                <p>© 2024 Modération. Tous droits réservés.</p>
+            </div>
+
+            <div class="col-2"></div>
+            <div class="col-2">
+                <div class="footer-section annexes">
+                    <a href="{{ path('app_a_propos') }}">À propos de nous</a>
+                    <a href="#">Contact</a>
+                    <a href="#">CGV</a>
+                    <a href="{{ path('app_mentions_legales') }}">Mentions legales</a>
+                </div>
+            </div>
+        </div>
+
+    </footer>
+
+<style>
+    .annexes {
+        display: flex;
+        flex-direction: column;
+        align-items: start;
+    }
+
+    .prev {
+        text-align: center;
+        margin-left: 25%;
+        margin-right: 25%;
+        color: white;
+    }
+
+    .footer {
+        background-color: #1E2A6A;
+        padding-top: 20px;
+    }
+
+    .footer-section {
+        flex: 1 1 200px;
+        margin: 10px;
+    }
+
+    .footer-section h4 {
+        margin-bottom: 10px;
+        font-size: 1.2em;
+    }
+
+    .footer-section p {
+        margin: 5px 0;
+    }
+
+    .footer-section a {
+        color: white;
+        text-decoration: none;
+        transition: color 0.3s;
+    }
+
+    .footer-section a:hover {
+        color: #f0f0f0;
+    }
+
+    .social-media .social-icon {
+        margin-right: 10px;
+    }
+
+    .social-icon img {
+        width: 24px;
+        height: 24px;
+        vertical-align: middle;
+    }
+
+    .footer-bottom {
+        text-align: center;
+        padding: 10px;
+        background-color: #1E2A6A;
+        color: white;
+    }
+
+    .footer-bottom p {
+        margin: 5px 0;
+    }
+
+    .footer-link {
+        color: white;
+        text-decoration: none;
+        margin: 0 10px;
+
+    }
+
+    .footer-link:hover {
+        text-decoration: underline;
+    }
+
+    @media (max-width: 768px) {
+        .footer-container {
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .footer-section {
+            margin: 10px 0;
+        }
+    }
+</style>
