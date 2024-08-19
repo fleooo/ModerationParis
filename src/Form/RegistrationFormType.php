@@ -122,7 +122,7 @@ class RegistrationFormType extends AbstractType
                 'invalid_message' => 'Les champs du mot de passe doivent correspondre.',
                 'required' => true,
                 'first_options' => [
-                    'label' => '',
+                    'label' => 'Mot de passe',
                     'constraints' => [
                         new NotBlank([
                             'message' => 'Veuillez entrer un mot de passe',
@@ -133,15 +133,9 @@ class RegistrationFormType extends AbstractType
                             'max' => 4096,
                         ]),
                     ],
-                    'attr' => [
-                        
-                    ]
                 ],
                 'second_options' => [
-                    'label' => '',
-                    'attr' => [
-                        
-                    ]
+                    'label' => 'Confirmer Mot de passe',
                 ],
             ])
         ;

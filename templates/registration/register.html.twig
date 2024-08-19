@@ -3,69 +3,133 @@
 {% block title %}Register{% endblock %}
 
 {% block body %}
-{% for flash_error in app.flashes('verify_email_error') %}
+{% for flash_error in app.flashes('error') %}
 <div class="alert alert-danger" role="alert">{{ flash_error }}</div>
 {% endfor %}
-<body>
-    <form class="form">
-        <h1 class="title">Inscription</h1>
-        <p class="message">Inscrivez-vous maintenant et obtenez un accès complet à notre application.</p>
 
-        <div class="form-content">
-            {{ form_start(registrationForm, {'attr': {'class': 'form'}}) }}
-            
-            <div class="flex">
-                <label for="firstname" class="input-group">
-                    {{ form_widget(registrationForm.firstname, {'attr': {'class': 'input', 'aria-label': 'Prénom'}}) }}
-                    <span>Prénom</span>
-                </label>
-                <label for="lastname" class="input-group">
-                    {{ form_widget(registrationForm.lastname, {'attr': {'class': 'input', 'aria-label': 'Nom de famille'}}) }}
-                    <span>Nom de famille</span>
-                </label>
-            </div>
-            
-            <label for="email" class="input-group">
-                {{ form_widget(registrationForm.email, {'attr': {'class': 'input', 'aria-label': 'E-mail'}}) }}
-                <span>E-mail</span>
+<form class="form" method="post">
+    <h1 class="title">Inscription</h1>
+    <p class="message">Inscrivez-vous maintenant et obtenez un accès complet à notre application.</p>
+
+    <div class="form-content">
+        {{ form_start(registrationForm, {'attr': {'class': 'form'}}) }}
+
+        <div class="flex">
+            <label for="firstname" class="input-group">
+                {{ form_widget(registrationForm.firstname, {'attr': {'class': 'input', 'aria-label': 'Prénom'}}) }}
+                <span>Prénom</span>
+                {% if registrationForm.firstname.vars.errors|length > 0 %}
+                <div class="alert alert-danger">
+                    {% for error in registrationForm.firstname.vars.errors %}
+                        {{ error.message }}
+                    {% endfor %}
+                </div>
+                {% endif %}
             </label>
-            
-            <label for="plainPassword" class="input-group">
-                {{ form_widget(registrationForm.password.first, {'attr': {'class': 'input', 'aria-label': 'Mot de passe'}}) }}
-                <span>Mot de passe</span>
+            <label for="lastname" class="input-group">
+                {{ form_widget(registrationForm.lastname, {'attr': {'class': 'input', 'aria-label': 'Nom de famille'}}) }}
+                <span>Nom de famille</span>
+                {% if registrationForm.lastname.vars.errors|length > 0 %}
+                <div class="alert alert-danger">
+                    {% for error in registrationForm.lastname.vars.errors %}
+                        {{ error.message }}
+                    {% endfor %}
+                </div>
+                {% endif %}
             </label>
-            <label for="plainPassword" class="input-group">
-                {{ form_widget(registrationForm.password.second, {'attr': {'class': 'input', 'aria-label': 'Confirmer Mot de passe'}}) }}
-                <span>Confirmer Mot de passe</span>
-            </label>
-            
-            <label for="city" class="input-group">
-                {{ form_widget(registrationForm.city, {'attr': {'class': 'input', 'aria-label': 'Ville'}}) }}  
-                <span>Ville</span>
-            </label>
-            
-            <label for="address" class="input-group">
-                {{ form_widget(registrationForm.address, {'attr': {'class': 'input', 'aria-label': 'Adresse'}}) }}  
-                <span>Adresse</span>
-            </label>
-            
-            <label for="zipcode" class="input-group">
-                {{ form_widget(registrationForm.zipcode, {'attr': {'class': 'input', 'aria-label': 'Code postal'}}) }}  
-                <span>Code postal</span>
-            </label>
-            
-            <label for="rgpdConsent" class="checkbox mt-2">
-                {{ form_widget(registrationForm.RgpdConsent, {'attr': {'class': 'checkbox-input', 'aria-label': 'Consentement RGPD'}}) }}
-                <span>J'accepte les termes et conditions</span>
-            </label>
-            <div class="confirmBtn">
-            <button type="submit" class="submit mt-2">Confirmation</button>
-            </div>
-            <p class="signin mt-2">Vous avez déjà un compte ? <a href="{{ path('app_login') }}">Connectez-vous</a></p>
-            {{ form_end(registrationForm) }}
         </div>
-    </form>
-</body>
+
+        <label for="email" class="input-group">
+            {{ form_widget(registrationForm.email, {'attr': {'class': 'input', 'aria-label': 'E-mail'}}) }}
+            <span>E-mail</span>
+            {% if registrationForm.email.vars.errors|length > 0 %}
+            <div class="alert alert-danger">
+                {% for error in registrationForm.email.vars.errors %}
+                    {{ error.message }}
+                {% endfor %}
+            </div>
+            {% endif %}
+        </label>
+
+        <label for="plainPassword" class="input-group">
+            {{ form_widget(registrationForm.password.first, {'attr': {'class': 'input', 'aria-label': 'Mot de passe'}}) }}
+            <span>Mot de passe</span>
+            {% if registrationForm.password.first.vars.errors|length > 0 %}
+            <div class="alert alert-danger">
+                {% for error in registrationForm.password.first.vars.errors %}
+                    {{ error.message }}
+                {% endfor %}
+            </div>
+            {% endif %}
+        </label>
+
+        <label for="plainPassword" class="input-group">
+            {{ form_widget(registrationForm.password.second, {'attr': {'class': 'input', 'aria-label': 'Confirmer Mot de passe'}}) }}
+            <span>Confirmer Mot de passe</span>
+            {% if registrationForm.password.second.vars.errors|length > 0 %}
+            <div class="alert alert-danger">
+                {% for error in registrationForm.password.second.vars.errors %}
+                    {{ error.message }}
+                {% endfor %}
+            </div>
+            {% endif %}
+        </label>
+
+        <label for="city" class="input-group">
+            {{ form_widget(registrationForm.city, {'attr': {'class': 'input', 'aria-label': 'Ville'}}) }}
+            <span>Ville</span>
+            {% if registrationForm.city.vars.errors|length > 0 %}
+            <div class="alert alert-danger">
+                {% for error in registrationForm.city.vars.errors %}
+                    {{ error.message }}
+                {% endfor %}
+            </div>
+            {% endif %}
+        </label>
+
+        <label for="address" class="input-group">
+            {{ form_widget(registrationForm.address, {'attr': {'class': 'input', 'aria-label': 'Adresse'}}) }}
+            <span>Adresse</span>
+            {% if registrationForm.address.vars.errors|length > 0 %}
+            <div class="alert alert-danger">
+                {% for error in registrationForm.address.vars.errors %}
+                    {{ error.message }}
+                {% endfor %}
+            </div>
+            {% endif %}
+        </label>
+
+        <label for="zipcode" class="input-group">
+            {{ form_widget(registrationForm.zipcode, {'attr': {'class': 'input', 'aria-label': 'Code postal'}}) }}
+            <span>Code postal</span>
+            {% if registrationForm.zipcode.vars.errors|length > 0 %}
+            <div class="alert alert-danger">
+                {% for error in registrationForm.zipcode.vars.errors %}
+                    {{ error.message }}
+                {% endfor %}
+            </div>
+            {% endif %}
+        </label>
+
+        <label for="rgpdConsent" class="checkbox mt-2">
+            {{ form_widget(registrationForm.RgpdConsent, {'attr': {'class': 'checkbox-input', 'aria-label': 'Consentement RGPD'}}) }}
+            <span>J'accepte les termes et conditions</span>
+            {% if registrationForm.RgpdConsent.vars.errors|length > 0 %}
+            <div class="alert alert-danger">
+                {% for error in registrationForm.RgpdConsent.vars.errors %}
+                    {{ error.message }}
+                {% endfor %}
+            </div>
+            {% endif %}
+        </label>
+
+        <div class="confirmBtn">
+            <button type="submit" class="submit mt-2">Confirmation</button>
+        </div>
+        <p class="signin mt-2">Vous avez déjà un compte ? <a href="{{ path('app_login') }}">Connectez-vous</a></p>
+        {{ form_end(registrationForm) }}
+    </div>
+</form>
 
 <style>
     /* Amélioration des styles */
@@ -120,7 +184,7 @@
         animation: pulse 1.5s linear infinite;
     }
 
-    .message, 
+    .message,
     .signin {
         font-size: 16px;
         color: rgba(255, 255, 255, 0.75);
@@ -158,7 +222,8 @@
         width: 100%;
         padding: 20px 10px 10px;
         border: 1px solid #FF88DC;
-        border-radius: 8px !important;  /* Bord arrondi forcé */
+        border-radius: 8px !important;
+        /* Bord arrondi forcé */
         outline: 0;
         transition: border-color 0.3s ease;
     }
@@ -167,7 +232,7 @@
         border-color: #f821b7;
     }
 
-    .input-group .input + span {
+    .input-group .input+span {
         color: #2176FF;
         position: absolute;
         left: 12px;
@@ -177,13 +242,13 @@
         transition: top 0.3s ease, font-size 0.3s ease;
     }
 
-    .input-group .input:placeholder-shown + span {
+    .input-group .input:placeholder-shown+span {
         top: 20px;
         font-size: 1em;
     }
 
-    .input-group .input:focus + span,
-    .input-group .input:valid + span {
+    .input-group .input:focus+span,
+    .input-group .input:valid+span {
         top: 8px;
         font-size: 0.8em;
         font-weight: 600;
@@ -192,17 +257,20 @@
     .submit {
         border: none;
         padding: 12px;
-        border-radius: 8px !important;  /* Bord arrondi forcé */
+        border-radius: 8px !important;
+        /* Bord arrondi forcé */
         color: #fff;
         font-size: 18px;
         background-color: #FF88DC;
         cursor: pointer;
         transition: background-color 0.3s ease, transform 0.2s ease;
     }
-  .confirmBtn{
-    display: flex;
-    justify-content: center;
-  }
+
+    .confirmBtn {
+        display: flex;
+        justify-content: center;
+    }
+
     .submit:hover {
         background-color: #f821b7;
         transform: translateY(-2px);
@@ -225,6 +293,7 @@
             transform: scale(0.9);
             opacity: 1;
         }
+
         to {
             transform: scale(1.8);
             opacity: 0;

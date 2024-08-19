@@ -40,10 +40,17 @@ class Categories
     #[ORM\OneToMany(targetEntity: Products::class, mappedBy: 'categories')]
     private Collection $products;
 
+    /**
+     * @var Collection<int, CategoryImage>
+     */
+    #[ORM\OneToMany(targetEntity: CategoryImage::class, mappedBy: 'categories', orphanRemoval: true)]
+    private Collection $categoryImages;
+
     public function __construct()
     {
         $this->categories = new ArrayCollection();
         $this->products = new ArrayCollection();
+        $this->categoryImages = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -140,6 +147,36 @@ class Categories
             // set the owning side to null (unless already changed)
             if ($product->getCategories() === $this) {
                 $product->setCategories(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, CategoryImage>
+     */
+    public function getCategoryImages(): Collection
+    {
+        return $this->categoryImages;
+    }
+
+    public function addCategoryImage(CategoryImage $categoryImage): static
+    {
+        if (!$this->categoryImages->contains($categoryImage)) {
+            $this->categoryImages->add($categoryImage);
+            $categoryImage->setCategories($this);
+        }
+
+        return $this;
+    }
+
+    public function removeCategoryImage(CategoryImage $categoryImage): static
+    {
+        if ($this->categoryImages->removeElement($categoryImage)) {
+            // set the owning side to null (unless already changed)
+            if ($categoryImage->getCategories() === $this) {
+                $categoryImage->setCategories(null);
             }
         }
 

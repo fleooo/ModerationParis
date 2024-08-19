@@ -9,13 +9,15 @@ use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Session\SessionInterface;
+use Symfony\Component\Mailer\MailerInterface;
+use Symfony\Component\Mime\Email;
 use Symfony\Component\Routing\Annotation\Route;
 
 #[Route('/commandes', name: 'app_orders_')]
 class OrdersController extends AbstractController
 {
     #[Route('/ajout', name: 'add')]
-    public function add(SessionInterface $session, ProductsRepository $productsRepository, EntityManagerInterface $em): Response
+    public function add(SessionInterface $session, ProductsRepository $productsRepository, EntityManagerInterface $em, MailerInterface $mailer): Response
     {
         $this->denyAccessUnlessGranted('ROLE_USER');
 
@@ -69,6 +71,31 @@ class OrdersController extends AbstractController
             $this->addFlash('error', 'Erreur lors de la création de la commande: ' . $e->getMessage());
             return $this->redirectToRoute('app_main');
         }
+
+        $session->remove('panier');
+
+        $this->addFlash('message', 'Commande créée avec succès');
+        return $this->redirectToRoute('app_main');
+
+        // Envoi d'emails
+        $user = $this->getUser();
+        $userEmail = $user->getEmail();
+        $adminEmail = 'admin@admin.com'; // Remplacez par l'email de l'administrateur
+
+        $emailSubject = 'Confirmation de votre commande';
+        $emailBody = $this->renderView('emails/order_confirmation.html.twig', [
+            'order' => $order,
+            'user' => $user,
+        ]);
+
+        $email = (new Email())
+            ->from('no-reply@example.com')
+            ->to($userEmail)
+            ->cc($adminEmail)
+            ->subject($emailSubject)
+            ->html($emailBody);
+
+        $mailer->send($email);
 
         $session->remove('panier');
 

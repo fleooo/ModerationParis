@@ -1,0 +1,16 @@
+<!DOCTYPE html>
+<html>
+<body>
+    <h1>Confirmation de votre commande</h1>
+    <p>Bonjour {{ user.username }},</p>
+    <p>Merci pour votre commande. Voici les détails de votre commande :</p>
+    <ul>
+        {% for detail in order.orderDetails %}
+            <li>{{ detail.product.name }} - {{ detail.quantity }} x {{ detail.price }}€</li>
+        {% endfor %}
+    </ul>
+    <p>Total : {{ order.total }}€</p>
+    <p>Nous vous contacterons bientôt avec les informations sur la livraison.</p>
+    <p>Merci de votre confiance !</p>
+</body>
+</html>
