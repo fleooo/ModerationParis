@@ -2,9 +2,7 @@ body {
     background-color: #F9EFEF;
     font-family: "Montserrat", sans-serif;
 }
-img{
-    background-color: #E4E4E4;
-}
+
 .form-control{
     border-radius: 10px;
     border: 7px solid #1E2A6A;

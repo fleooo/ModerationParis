@@ -15,13 +15,13 @@ class CategoriesController extends AbstractController
     #[Route('/{slug}', name: 'list')]
     public function list(Categories $category, ProductsRepository $productsRepository, Request $request): Response
     {
-        
         $products = $category->getProducts();
-        return $this->render('categories/list.html.twig', compact('category','products'));
-        // Syntaxe alternative
-        // return $this->render('categories/list.html.twig', [
-        //     'category' => $category,
-        //     'products' => $products
-        // ]);
+        $images = $category->getCategoryImages(); // Assurez-vous que cela récupère les images correctement
+
+        return $this->render('categories/list.html.twig', [
+            'category' => $category,
+            'products' => $products,
+            'images' => $images, // Passez les images au template
+        ]);
     }
 }

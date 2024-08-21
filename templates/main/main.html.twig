@@ -2,66 +2,280 @@
 
 {% block body %}
 <main>
-            <div class="center-content">
-                <h1>Moderation Paris </h1>
-                <h3>On livre tout pour vos soirées, sauf la modération !! 7/7j de 18h à 7h en moins de 30 minutes.</h3>
-                <br>
-            
-            <a href="{{ path('app_parents_categories', {slug: 'avec-moderations'}) }}" class="btn back-yellow">Avec
-                modérations</a>
-            <a href="{{ path('app_parents_categories', {slug: 'sans-moderations'}) }}" class="btn back-blue">Sans
-                modérations</a>
-       
-    
-            
-    <div class="carousel-container mt-5">
-        <h4>Nos catégories :</h4>
-        <!-- Carousel -->
-            <div id="slider-container">
-                <span onclick="slideRight()" class="btn"></span>
-                <div id="slider">
-                    <div class="slide"><img src="Images/gins.png" alt="Gins"></div>
-                    <div class="slide"><img src="Images/rhum.png" alt="Rhum"></div>
-                    <div class="slide"><img src="Images/tequila.png" alt="Tequila"></div>
-                    <div class="slide"><img src="Images/vodka.png" alt="Vodka"></div>
-                    <div class="slide"><img src="Images/whiskey.png" alt="Whiskey"></div>
-                    <div class="slide"><img src="Images/whiskey.png" alt="Whiskey"></div>
-                    <div class="slide"><img src="Images/vodka.png" alt="Vodka"></div>
-                    <div class="slide"><img src="Images/tequila.png" alt="Tequila"></div>
-                    <div class="slide"><img src="Images/rhum.png" alt="Rhum"></div>
-                    <div class="slide"><img src="Images/gins.png" alt="Gins"></div>
-                    <div class="slide"><img src="Images/tequila.png" alt="Tequila"></div>
-                    <div class="slide"><img src="Images/rhum.png" alt="Rhum"></div>
-                    <div class="slide"><img src="Images/gins.png" alt="Gins"></div>
-                    <div class="slide"><img src="Images/tequila.png" alt="Tequila"></div>
-                    <div class="slide"><img src="Images/rhum.png" alt="Rhum"></div>
-                    <div class="slide"><img src="Images/gins.png" alt="Gins"></div>
-                </div>
-                <span onclick="slideLeft()" class="btn"></span>
-            </div>
-    </div>
- </div>
-    <script src="assets/pageAccueil.js"></script>
-</main>
-<style>
-.center-content{
-    text-align: center;
+    <div class="center-content">
+        <h1>Modération Paris</h1>
+        <h3>On livre tout pour vos soirées, sauf la modération !! 7/7j de 18h à 7h en moins de 30 minutes.</h3>
+        <br>
 
-}
-    .back-blue {
+        <a href="{{ path('app_parents_categories', {slug: 'avec-moderations'}) }}" class="btn custom-yellow">Avec modérations</a>
+        <a href="{{ path('app_parents_categories', {slug: 'sans-moderations'}) }}" class="btn custom-blue">Sans modérations</a>
+
+        <h1 class="mt-5">Nos Categories :</h1>
+        <div class="carousel-container mt-2">
+            <div class="carousel">
+                {% for category in categories %}
+                    {% if category.categoryImages|length > 0 %}
+                        <div class="carousel-slide">
+                            {% for image in category.categoryImages %}
+                                <div class="carousel-item">
+                                    <a href="{{ path('categories_list', {slug: category.slug}) }}" class="catName">
+                                        <img src="{{ asset('asset/uploads/categories/' ~ image.name) }}" alt="{{ category.name }}" class="img-fluid">
+                                    </a>
+                                    <div class="carousel-caption mt-1">
+                                        <h3>{{ category.name }}</h3>
+                                    </div>
+                                </div>
+                            {% endfor %}
+                        </div>
+                    {% endif %}
+                {% endfor %}
+            </div>
+            <button class="carousel-prev">&lt;</button>
+            <button class="carousel-next">&gt;</button>
+        </div>
+
+    {# <div class="diagonal-section">
+        <div class="text-area">
+            <h4 class="mt-3">UN SERVICE D'EXCEPTION</h4>
+            <p>
+                Vous voulez vous faire livrer du champagne pour célébrer une bonne nouvelle.
+                Vous organisez une fête et <br> vous n'avez plus rien à boire ?
+                Choisissez la livraison rapide à domicile, au travail ou même à l'hôtel<br> pour toutes vos boissons, 
+                alcoolisées ou non.
+            </p>
+            <p>
+                Notre équipe se charge de vous faire parvenir de quoi boire en toute liberté en famille et entre
+                amis<br> pour profiter de la vie quel que soit le moment de l'année ou l'occasion à fêter.
+            </p>
+        </div>
+        <div class="image-area">
+            <img src="img/banierePhoto.jpg" alt="Service d'Exception">
+        </div>
+    </div> #}
+    
+    <section class="row mt-5 newProducts">
+        <div class="col-12">
+            <h2 class="text-center">Produits récents</h2>
+        </div>
+        {% for product in products|slice(0, 8) %}
+        <div class="col-3 mt-5 mb-4 mx-3 cardProd">
+            <a href="{{ path('products_details', {'slug': product.slug }) }}" class="text-decoration-none">
+                <img src="{{ asset('asset/uploads/products/' ~ product.images[0].name ) }}" class="card-img-top rounded-5" alt="{{ product.name }}">
+            </a>
+            <div class="card-body">
+                <div class="d-flex justify-content-between mt-2">
+                    <b class="titreCat">{{ product.categories.name }}</b> <!-- Utilisation correcte de product.category -->
+                    <p class="card-title">{{ product.price / 100 }}€</p>
+                </div>
+                <p class="card-title">{{ product.name }}</p>
+            </div>
+            <div class="mt-2">
+                {% if product.stock > 0 %}
+                <div class='abtn'>
+                    <button id="add-to-cart" data-product-id="{{ product.id }}" class="add-to-cart-btn addbtn">+</button>
+                </div>
+                {% else %}
+                <p class="text-danger">Temporairement en rupture de stock</p>
+                {% endif %}
+            </div>
+        </div>
+        {% endfor %}
+    </section>
+
+    <script src="{{ asset('assets/pageAccueil.js') }}"></script>
+</main>
+
+
+<style>
+    .cardProd {
+        width: 15rem;
+
+    }
+    .cardProd p{
+        display: flex;
+        justify-content: flex-start;
+    }
+    .newProducts {
+        display: flex;
+        justify-content: center;
+        width: 70%;
+        margin-left: auto;
+        margin-right: auto;
+
+    }
+        .addbtn{
+            background-color: #FF88DC;
+            color: #1E2A6A;
+            border-radius: 60%;
+            border: none;
+        }
+        .abtn{
+            display: flex;
+            justify-content: end;
+        }
+
+    .carousel-container {
+        position: relative;
+        overflow: hidden;
+        width: 2000%;
+        max-width: 1400px; /* Ajustez en fonction de votre besoin */
+        margin: auto;
+    }
+    
+    .carousel {
+        display: flex;
+        transition: transform 0.5s ease-in-out;
+    }
+    
+    .carousel-slide {
+        display: flex;
+        flex-wrap: nowrap; /* Assurez-vous que les images ne se replient pas */
+    }
+    
+    .carousel-item {
+        right: 2000px;
+        flex: 90%; /* Affiche 4 éléments à la fois (100% / 4 = 25%) */
+        padding: 160px; /* Ajustez l'espacement entre les images si nécessaire */
+    }
+   
+    .carousel-caption {
+        position: absolute;
+        bottom: 20px;
+        left: 100px;
+        color: black;
+        padding: 10px;
+        
+    }
+
+    .carousel-prev, .carousel-next {
+        position: absolute;
+        top: 50%;
+        transform: translateY(-50%);
+        background-color: #FF88DC;
+        color: white;
+        border: none;
+        padding: 10px;
+        cursor: pointer;
+        border-radius: 50%;
+        z-index: 10;
+    }
+
+    .carousel-prev {
+        left: 30px;
+    }
+
+    .carousel-next {
+        right: 30px;
+    }
+    .text-area {
+        flex: 2;
+        background-color: #2b3f77;
+        color: white;
+        padding: 20px;
+        margin: 0;
+        clip-path: polygon(0 0, 100% 0, 85% 100%, 0% 100%);
+    }
+    .img-fluid{
+        background: none;
+    }
+    .image-area {
+        flex: 2;
+        overflow: hidden;
+        clip-path: polygon(15% 0, 100% 0, 100% 100%, 0% 100%);
+    }
+    
+    .image-area {
+        width: 100%;
+        height: 100%;
+        background: none;
+        object-fit: cover;
+        display: block; /* Remove whitespace below image */
+    }
+    
+    .center-content {
+        text-align: center;
+    }
+    
+    .custom-blue {
         background-color: #2176FF;
     }
-
-    .back-yellow {
+    
+    .custom-yellow {
         background-color: #F7B538;
     }
-    .back-blue:hover {
+    
+    .custom-blue:hover {
         background-color: #0661f5;
     }
-
-    .back-yellow:hover {
+    
+    .custom-yellow:hover {
         background-color: #f8a916;
     }
-
 </style>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const slides = document.querySelector('.carousel');
+        const items = document.querySelectorAll('.carousel-item');
+        const prevButton = document.querySelector('.carousel-prev');
+        const nextButton = document.querySelector('.carousel-next');
+        const itemsPerSlide = 4; // Nombre d'éléments à afficher par diapositive
+        const totalItems = items.length;
+        const totalSlides = Math.ceil(totalItems / itemsPerSlide);
+        let index = 0;
+    
+        function showSlide(i) {
+            if (i >= totalSlides) {
+                index = 0;
+            } else if (i < 0) {
+                index = totalSlides - 1;
+            } else {
+                index = i;
+            }
+            slides.style.transform = 'translateX(' + (-index * (100 / totalSlides)) + '%)';
+        }
+    
+        nextButton.addEventListener('click', function() {
+            showSlide(index + 1);
+        });
+    
+        prevButton.addEventListener('click', function() {
+            showSlide(index - 1);
+        });
+    
+        // Fonctionnalité d'auto-slide
+        setInterval(function() {
+            showSlide(index + 1);
+        }, 3000); // Change de diapositive toutes les 3 secondes
+    });
+
+
+        document.querySelectorAll('.add-to-cart-btn').forEach(button => {
+            button.addEventListener('click', function (event) {
+                event.preventDefault();
+                const productId = this.dataset.productId;
+    
+                fetch('{{ path('cart_add_ajax') }}', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'X-Requested-With': 'XMLHttpRequest'
+                    },
+                    body: JSON.stringify({ id: productId })
+                })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.success) {
+                        alert(data.message);
+                    } else {
+                        alert('Erreur : ' + data.message);
+                    }
+                })
+                .catch(error => {
+                    console.error('Erreur:', error);
+                });
+            });
+        });
+
+</script>
 {% endblock %}

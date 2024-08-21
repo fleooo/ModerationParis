@@ -1,0 +1,18 @@
+{% extends "base.html.twig" %}
+
+{% block title %}Edit Category{% endblock %}
+
+{% block body %}
+    <div class="container">
+        <div class="row">
+            {% include "_partials/_adminnav.html.twig" %}
+            <main class="col-9 border border-light bg-white p-2">
+                <h1>Edit Category</h1>
+                {{ form_start(form) }}
+                {{ form_widget(form) }}
+                <button type="submit" class="btn btn-primary">Save</button>
+                {{ form_end(form) }}
+            </main>
+        </div>
+    </div>
+{% endblock %}

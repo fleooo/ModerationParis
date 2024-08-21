@@ -7,21 +7,24 @@
             </b>
         </div>
         <div class="footer-bottom row">
-            <div class="imgPrev"><img src="img/messagePrev.png" alt="gouverenment" class="mt-3 msgPrev"></div>
+            <div class="imgPrev"><img src="{{ asset('img/messagePrev.png') }}" alt="gouverenment" class="mt-3 msgPrev"></div>
+            <div class="col-2 "><img src="{{ asset('img/logoModerations.png') }}" alt="logo" class="logo"></div>
             <b class="mt-3"><a href="/page/avec-moderations" class="footer-link">Avec-Moderations</a>/<a
                     href="/page/sans-moderations" class="footer-link">Sans-Moderations</a></b>
-            <div class="col-2 "><img src="img/logoModerations.png" alt="logo" class="logo"></div>
-            <div class="col-2"></div>
-            <div class="footer-section social-media col-4">
+            <div class="col-4"></div>
+            <div class="footer-section ms-5 social-media">
                 <p class="mt-3">
                     <a href="#" class="social-icon">
-                        <img src="path/to/facebook-icon.svg" alt="Facebook">
+                        <img src="{{ asset('img/facebook.png') }}" alt="Facebook">
                     </a>
                     <a href="#" class="social-icon">
-                        <img src="path/to/twitter-icon.svg" alt="Twitter">
+                        <img src="{{ asset('img/twitter.png') }}" alt="Twitter">
                     </a>
                     <a href="#" class="social-icon">
-                        <img src="path/to/instagram-icon.svg" alt="Instagram">
+                        <img src="{{ asset('img/insta.png') }}" alt="Instagram">
+                    </a>
+                    <a href="#" class="social-icon">
+                        <img src="{{ asset('img/whatsapp.png') }}" alt="Whatsapp">
                     </a>
                 </p>
                 <p>© 2024 Modération. Tous droits réservés.</p>
@@ -99,6 +102,7 @@
         width: 24px;
         height: 24px;
         vertical-align: middle;
+        background: none;
     }
 
     .footer-bottom {

@@ -1,8 +1,7 @@
 {% extends 'base.html.twig' %}
 
 {% block body %}
-<main>
-    <div class="big">
+<div class="big">
         <h2 class="pt-2 pb-2 
             {% if parentCategory.name == 'Avec Moderations' %}
                 back-yellow
@@ -13,35 +12,66 @@
             {{ parentCategory.name }}
         </h2>
     </div>
+<main>
+    
     <section class="row">
-
         {% for category in categories %}
         <div class="col-3">
-            <div class="card h-100">
-                <div class="card-body">
-                    <h3 class="card-title">{{ category.name }}</h3>
-                    <a href="{{ path('categories_list', {slug: category.slug}) }}" class="catName">{{ category.name }}</a>
-                </div>
+            {% if category.categoryImages|length > 0 %}
+            <div class="category-images mt-3">
+                {% for image in category.categoryImages %}
+                <a href="{{ path('categories_list', {slug: category.slug}) }}" class="catName"><img
+                        src="{{ asset('asset/uploads/categories/' ~ image.name) }}" alt="{{ category.name }}"
+                        class="img-fluid"></a>
+                {% endfor %}
             </div>
+            <a href="{{ path('categories_list', {slug: category.slug}) }}" class="catName">
+                <h3 class="card-title">{{ category.name }}</h3>
+            </a>
+            {% endif %}
+        </div>
+        </div>
         </div>
         {% endfor %}
     </section>
 </main>
-<style>
+
+<style> 
+.category-images{
+    display: flex;
+    justify-content: center;
+}
+    .img-fluid{
+        background: none;
+        display: flex;
+        justify-content: center;
+
+    }
     .big {
         background-color: #F7B538;
         color: white;
         text-align: center;
         text-transform: uppercase;
     }
-    .catName{
-        text-decoration: none;  
+
+    .catName {
+        text-decoration: none;
     }
+
     .back-blue {
         background-color: #2176FF;
     }
+
     .back-yellow {
         background-color: #F7B538;
+    }
+
+    .category-images img {
+        max-width: 100%;
+        height: auto;
+    }
+    .card-title{
+        text-align: center;
     }
 </style>
 {% endblock %}

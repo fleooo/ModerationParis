@@ -2,15 +2,19 @@
 
 namespace App\Entity;
 
+use App\Entity\Trait\CreatedAtTrait;
 use App\Entity\Trait\SlugTrait;
 use App\Repository\CategoriesRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
+use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Validator\Constraints as Assert;
 
 #[ORM\Entity(repositoryClass: CategoriesRepository::class)]
 class Categories
 {
+    use CreatedAtTrait;
     use SlugTrait;
 
     #[ORM\Id]
@@ -18,21 +22,31 @@ class Categories
     #[ORM\Column]
     private ?int $id = null;
 
-    #[ORM\Column(length: 100)]
+    #[ORM\Column(length: 255)]
+    #[Assert\NotBlank(message: 'Le nom de la catégorie ne peut pas être vide')]
+    #[Assert\Length(
+        min: 3,
+        max: 255,
+        minMessage: 'Le nom de la catégorie doit contenir au moins {{ limit }} caractères',
+        maxMessage: 'Le nom de la catégorie ne peut pas contenir plus de {{ limit }} caractères'
+    )]
     private ?string $name = null;
 
-    #[ORM\Column]
+    #[ORM\Column(type: Types::TEXT, nullable: true)]
+    private ?string $description = null;
+
+    #[ORM\Column(type: Types::INTEGER, nullable: true)]
     private ?int $categoryOrder = null;
 
-    #[ORM\ManyToOne(targetEntity: self::class, inversedBy: 'categories')]
-    #[ORM\JoinColumn(onDelete:'CASCADE')]
+    #[ORM\ManyToOne(targetEntity: self::class, inversedBy: 'subCategories')]
+    #[ORM\JoinColumn(nullable: true)]
     private ?self $parent = null;
 
     /**
      * @var Collection<int, self>
      */
-    #[ORM\OneToMany(targetEntity: self::class, mappedBy: 'parent')]
-    private Collection $categories;
+    #[ORM\OneToMany(targetEntity: self::class, mappedBy: 'parent', orphanRemoval: true)]
+    private Collection $subCategories;
 
     /**
      * @var Collection<int, Products>
@@ -43,14 +57,15 @@ class Categories
     /**
      * @var Collection<int, CategoryImage>
      */
-    #[ORM\OneToMany(targetEntity: CategoryImage::class, mappedBy: 'categories', orphanRemoval: true)]
+    #[ORM\OneToMany(targetEntity: CategoryImage::class, mappedBy: 'categories', orphanRemoval: true, cascade: ['persist'])]
     private Collection $categoryImages;
 
     public function __construct()
     {
-        $this->categories = new ArrayCollection();
+        $this->subCategories = new ArrayCollection();
         $this->products = new ArrayCollection();
         $this->categoryImages = new ArrayCollection();
+        $this->created_at = new \DateTimeImmutable();
     }
 
     public function getId(): ?int
@@ -66,18 +81,28 @@ class Categories
     public function setName(string $name): static
     {
         $this->name = $name;
-
         return $this;
     }
+
+    public function getDescription(): ?string
+    {
+        return $this->description;
+    }
+
+    public function setDescription(?string $description): static
+    {
+        $this->description = $description;
+        return $this;
+    }
+
     public function getCategoryOrder(): ?int
     {
         return $this->categoryOrder;
     }
 
-    public function setCatgoryOrder(int $categoryOrder): static
+    public function setCategoryOrder(?int $categoryOrder): static
     {
         $this->categoryOrder = $categoryOrder;
-
         return $this;
     }
 
@@ -89,37 +114,33 @@ class Categories
     public function setParent(?self $parent): static
     {
         $this->parent = $parent;
-
         return $this;
     }
 
     /**
      * @return Collection<int, self>
      */
-    public function getCategories(): Collection
+    public function getSubCategories(): Collection
     {
-        return $this->categories;
+        return $this->subCategories;
     }
 
-    public function addCategory(self $category): static
+    public function addSubCategory(self $subCategory): static
     {
-        if (!$this->categories->contains($category)) {
-            $this->categories->add($category);
-            $category->setParent($this);
+        if (!$this->subCategories->contains($subCategory)) {
+            $this->subCategories->add($subCategory);
+            $subCategory->setParent($this);
         }
-
         return $this;
     }
 
-    public function removeCategory(self $category): static
+    public function removeSubCategory(self $subCategory): static
     {
-        if ($this->categories->removeElement($category)) {
-            // set the owning side to null (unless already changed)
-            if ($category->getParent() === $this) {
-                $category->setParent(null);
+        if ($this->subCategories->removeElement($subCategory)) {
+            if ($subCategory->getParent() === $this) {
+                $subCategory->setParent(null);
             }
         }
-
         return $this;
     }
 
@@ -137,19 +158,16 @@ class Categories
             $this->products->add($product);
             $product->setCategories($this);
         }
-
         return $this;
     }
 
     public function removeProduct(Products $product): static
     {
         if ($this->products->removeElement($product)) {
-            // set the owning side to null (unless already changed)
             if ($product->getCategories() === $this) {
                 $product->setCategories(null);
             }
         }
-
         return $this;
     }
 
@@ -167,19 +185,16 @@ class Categories
             $this->categoryImages->add($categoryImage);
             $categoryImage->setCategories($this);
         }
-
         return $this;
     }
 
     public function removeCategoryImage(CategoryImage $categoryImage): static
     {
         if ($this->categoryImages->removeElement($categoryImage)) {
-            // set the owning side to null (unless already changed)
             if ($categoryImage->getCategories() === $this) {
                 $categoryImage->setCategories(null);
             }
         }
-
         return $this;
     }
 }
